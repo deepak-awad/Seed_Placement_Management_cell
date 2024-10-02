@@ -1,0 +1,70 @@
+package com.controller;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.dao.CandidateProfile;
+import com.service.CandidateProfileService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@RestController
+@RequestMapping("/candidateprofiles")
+public class CandidateProfileController {
+
+    @Autowired
+    private CandidateProfileService candidateProfileService;
+
+    @Autowired
+    private ObjectMapper objectMapper; // To convert JSON to object
+
+    // Get all candidate profiles
+    @GetMapping("/all")
+    public ResponseEntity<Iterable<CandidateProfile>> getAllCandidateProfiles() {
+        return new ResponseEntity<>(candidateProfileService.getAllCandidateProfiles(), HttpStatus.OK);
+    }
+
+    // Get candidate profile by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<CandidateProfile> getCandidateProfileById(@PathVariable Long id) {
+        Optional<CandidateProfile> candidateProfile = candidateProfileService.getCandidateProfileById(id);
+        return candidateProfile.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    // Endpoint to save candidate profile with resume
+    @PostMapping("/save")
+    public ResponseEntity<String> saveCandidateProfile(
+            @RequestPart("profile") String profileJson,
+            @RequestPart("resume") MultipartFile resumeFile) {
+
+        try {
+            // Deserialize the JSON string to CandidateProfile object
+            CandidateProfile profile = objectMapper.readValue(profileJson, CandidateProfile.class);
+
+            // Save the resume as a byte array
+            if (resumeFile != null) {
+                profile.setResume(resumeFile.getBytes());
+            }
+
+            // Save the profile and resume
+            candidateProfileService.saveCandidateProfile(profile);
+            return new ResponseEntity<>("Profile saved successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the exception for debugging
+            return new ResponseEntity<>("Error saving profile: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // Delete a candidate profile
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCandidateProfile(@PathVariable Long id) {
+        candidateProfileService.deleteCandidateProfile(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+}
+

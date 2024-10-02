@@ -1,0 +1,40 @@
+package com.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.dao.CandidateProfile;
+import com.repository.CandidateProfileRepository;
+
+@Service
+public class CandidateProfileService {
+
+    @Autowired
+    private CandidateProfileRepository candidateProfileRepository;
+
+    // Method to save the candidate profile
+    @Transactional
+    public void saveCandidateProfile(CandidateProfile profile) {
+        // Set created and updated dates
+        profile.setCreatedDate(new Date());
+        profile.setUpdatedDate(new Date());
+        
+        // Save the candidate profile to the database
+        candidateProfileRepository.save(profile);
+    }
+
+    // Method to get all candidate profiles
+    public Iterable<CandidateProfile> getAllCandidateProfiles() {
+        return candidateProfileRepository.findAll();
+    }
+
+    // Method to get candidate profile by ID
+    public Optional<CandidateProfile> getCandidateProfileById(Long id) {
+        return candidateProfileRepository.findById(id);
+    }
+
+    // Method to delete a candidate profile
+    public void deleteCandidateProfile(Long id) {
+        candidateProfileRepository.deleteById(id);
+    }
+}

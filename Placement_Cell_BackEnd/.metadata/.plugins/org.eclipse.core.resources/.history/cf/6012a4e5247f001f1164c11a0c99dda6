@@ -1,0 +1,14 @@
+package com.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+
+import com.dao.Application;
+import com.dao.JobApplicationDTO;
+
+public interface ApplicationRepository extends CrudRepository<Application, Long> {
+    
+}

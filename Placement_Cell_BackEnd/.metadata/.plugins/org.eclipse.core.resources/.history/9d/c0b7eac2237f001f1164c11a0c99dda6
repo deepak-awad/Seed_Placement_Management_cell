@@ -1,0 +1,54 @@
+package com.service;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.dao.Application;
+import com.repository.ApplicationRepository;
+
+@Service
+public class ApplicationService {
+
+    @Autowired
+    private ApplicationRepository applicationRepository;
+
+    // Save or Update Application
+    public Application saveOrUpdateApplication(Application application) {
+        if (application.getApplicationId() == null) {
+            application.setCreatedDate(LocalDateTime.now());
+        }
+        application.setUpdateDate(LocalDateTime.now());
+        return applicationRepository.save(application);
+    }
+
+    // Get All Applications
+    public Iterable<Application> getAllApplications() {
+        return applicationRepository.findAll();
+    }
+
+    // Get Application by ID
+    public Optional<Application> getApplicationById(Long id) {
+        return applicationRepository.findById(id);
+    }
+
+    // Delete Application
+    public void deleteApplication(Long id) {
+        applicationRepository.deleteById(id);
+    }
+    public List<JobApplicationDTO> getApplicationsByCandidateId(Long candidateId) {
+        return applicationRepository.findByCandidateId(candidateId).stream()
+            .map(application -> {
+                var jobPost = jobPostRepository.findById(application.getJobId()).orElse(null);
+                return new JobApplicationDTO(
+                    jobPost != null ? jobPost.getCompanyName() : "Unknown",
+                    jobPost != null ? jobPost.getJobTitle() : "Unknown",
+                    application.getStatus()
+                );
+            })
+            .collect(Collectors.toList());
+    }
+
+}

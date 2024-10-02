@@ -1,0 +1,95 @@
+package com.dao;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "APPLICATION")
+public class Application {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "application_seq")
+    @SequenceGenerator(name = "application_seq", sequenceName = "application_seq", allocationSize = 1)
+    private Long applicationId;
+
+    @Column(name = "candidate_id", nullable = false)
+    private Long candidateId;
+
+    @Column(name = "job_id", nullable = false)
+    private Long jobId;
+
+    @Column(name = "status", nullable = false)
+    private String status;
+
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
+    @Column(name = "update_date")
+    private LocalDateTime updateDate;
+
+	
+    
+    
+    public Application() {
+		super();
+		
+	}
+
+	public Long getApplicationId() {
+		return applicationId;
+	}
+
+	public void setApplicationId(Long applicationId) {
+		this.applicationId = applicationId;
+	}
+
+	public Long getCandidateId() {
+		return candidateId;
+	}
+
+	public void setCandidateId(Long candidateId) {
+		this.candidateId = candidateId;
+	}
+
+	public Long getJobId() {
+		return jobId;
+	}
+
+	public void setJobId(Long jobId) {
+		this.jobId = jobId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public LocalDateTime getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(LocalDateTime updateDate) {
+		this.updateDate = updateDate;
+	}
+
+	@Override
+	public String toString() {
+		return "Application [applicationId=" + applicationId + ", candidateId=" + candidateId + ", jobId=" + jobId
+				+ ", status=" + status + ", createdDate=" + createdDate + ", updateDate=" + updateDate + "]";
+	}
+	
+	
+    
+   
+}

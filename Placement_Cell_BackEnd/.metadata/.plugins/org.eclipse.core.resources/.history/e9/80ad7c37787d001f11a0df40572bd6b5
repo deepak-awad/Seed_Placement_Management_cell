@@ -1,0 +1,33 @@
+package com.service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.dao.PlacementExecutive;
+import com.repository.PlacementExecutiveRepository;
+
+@Service
+public class PlacementExecutiveService {
+
+    @Autowired
+    private PlacementExecutiveRepository placementExecutiveRepository;
+    
+    public Optional<PlacementExecutive> getExecutiveByUsername(String username) {
+        try {
+            return placementExecutiveRepository.findByUsername(username);
+        } catch (Exception e) {
+            // Log the error
+            System.err.println("Error fetching executive by username: " + e.getMessage());
+            return Optional.empty(); // Or handle it in a way that suits your application
+        }
+    }
+
+
+   
+}

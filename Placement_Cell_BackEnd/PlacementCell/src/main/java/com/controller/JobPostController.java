@@ -1,0 +1,53 @@
+package com.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.dao.JobPost;
+import com.service.JobPostService;
+
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/jobposts")
+public class JobPostController {
+
+    @Autowired
+    private JobPostService jobPostService;
+
+    // Get all job posts
+    @GetMapping("/all")
+    public ResponseEntity<Iterable<JobPost>> getAllJobPosts() {
+        return new ResponseEntity<>(jobPostService.getAllJobPosts(), HttpStatus.OK);
+    }
+
+    // Get job post by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<JobPost> getJobPostById(@PathVariable Long id) {
+        Optional<JobPost> jobPost = jobPostService.getJobPostById(id);
+        return jobPost.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    // Create or update a job post
+    @PostMapping("/save")
+    public ResponseEntity<JobPost> createOrUpdateJobPost(@RequestBody JobPost jobPost) {
+        return new ResponseEntity<>(jobPostService.saveOrUpdateJobPost(jobPost), HttpStatus.CREATED);
+    }
+
+    // Delete job post by ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteJobPost(@PathVariable Long id) {
+        jobPostService.deleteJobPost(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    
+ // Get the total count of job posts
+    @GetMapping("/total-count")
+    public ResponseEntity<Long> getTotalJobPostCount() {
+        Long totalJobPosts = jobPostService.getTotalJobPostCount();
+        return ResponseEntity.ok(totalJobPosts);
+    }
+}

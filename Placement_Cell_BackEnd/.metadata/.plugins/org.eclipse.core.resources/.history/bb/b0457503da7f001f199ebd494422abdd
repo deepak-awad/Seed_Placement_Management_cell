@@ -1,0 +1,52 @@
+package com.controller;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.dao.Queries;
+import com.service.QueriesService;
+
+@RestController
+@RequestMapping("/queries")
+public class QueriesController {
+
+    @Autowired
+    private QueriesService queriesService;
+
+    // Get all queries
+    @GetMapping("/all")
+    public ResponseEntity<Iterable<Queries>> getAllQueries() {
+        return new ResponseEntity<>(queriesService.getAllQueries(), HttpStatus.OK);
+    }
+
+    // Get query by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Queries> getQueryById(@PathVariable Long id) {
+        Optional<Queries> query = queriesService.getQueryById(id);
+        return query.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    // Create or update query
+    @PostMapping("/save")
+    public ResponseEntity<Queries> saveOrUpdateQuery(@RequestBody Queries query) {
+        return new ResponseEntity<>(queriesService.saveOrUpdateQuery(query), HttpStatus.CREATED);
+    }
+
+    // Delete query by ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteQuery(@PathVariable Long id) {
+        queriesService.deleteQuery(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+}

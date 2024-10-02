@@ -1,0 +1,26 @@
+package com.service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.dao.PlacementExecutive;
+import com.repository.PlacementExecutiveRepository;
+
+@Service
+public class PlacementExecutiveService {
+
+    @Autowired
+    private PlacementExecutiveRepository placementExecutiveRepository;
+    
+    public Optional<PlacementExecutive> getExecutiveByUsername(String username) {
+        return placementExecutiveRepository.findByUsername(username);
+    }
+
+   
+}

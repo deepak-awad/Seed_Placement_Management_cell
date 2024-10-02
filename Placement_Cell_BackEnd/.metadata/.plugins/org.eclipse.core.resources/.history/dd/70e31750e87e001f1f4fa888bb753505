@@ -1,0 +1,176 @@
+package com.dao;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+
+import java.time.LocalDate;
+import java.util.Date;
+
+@Entity
+@Table(name = "job_post")
+public class JobPost {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "job_post_seq")
+    @SequenceGenerator(name = "job_post_seq", sequenceName = "job_post_seq", allocationSize = 1)
+    @Column(name = "job_id")
+    private Long jobId;
+
+    @Column(name = "authority_id", nullable = false)
+    private Long authorityId;
+
+    @Column(name = "company_name", nullable = false)
+    private String companyName;
+
+    @Column(name = "job_title", nullable = false)
+    private String jobTitle;
+
+    @Column(name = "job_description")
+    private String jobDescription;
+
+    @Column(name = "salary")
+    private Double salary;
+
+    @Column(name = "eligibility_criteria")
+    private String eligibilityCriteria;
+
+    @Column(name = "deadline")
+    @Temporal(TemporalType.DATE)
+    private LocalDate deadline;
+
+    @Column(name = "created_date", updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate;
+
+    @Column(name = "updated_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedDate;
+
+    @PrePersist
+    protected void onCreate() {
+        createdDate = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedDate = new Date();
+    }
+
+	public JobPost() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public JobPost(Long jobId, Long authorityId, String companyName, String jobTitle, String jobDescription,
+			Double salary, String eligibilityCriteria, LocalDate deadline, Date createdDate, Date updatedDate) {
+		super();
+		this.jobId = jobId;
+		this.authorityId = authorityId;
+		this.companyName = companyName;
+		this.jobTitle = jobTitle;
+		this.jobDescription = jobDescription;
+		this.salary = salary;
+		this.eligibilityCriteria = eligibilityCriteria;
+		this.deadline = deadline;
+		this.createdDate = createdDate;
+		this.updatedDate = updatedDate;
+	}
+
+	public Long getJobId() {
+		return jobId;
+	}
+
+	public void setJobId(Long jobId) {
+		this.jobId = jobId;
+	}
+
+	public Long getAuthorityId() {
+		return authorityId;
+	}
+
+	public void setAuthorityId(Long authorityId) {
+		this.authorityId = authorityId;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getJobTitle() {
+		return jobTitle;
+	}
+
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
+
+	public String getJobDescription() {
+		return jobDescription;
+	}
+
+	public void setJobDescription(String jobDescription) {
+		this.jobDescription = jobDescription;
+	}
+
+	public Double getSalary() {
+		return salary;
+	}
+
+	public void setSalary(Double salary) {
+		this.salary = salary;
+	}
+
+	public String getEligibilityCriteria() {
+		return eligibilityCriteria;
+	}
+
+	public void setEligibilityCriteria(String eligibilityCriteria) {
+		this.eligibilityCriteria = eligibilityCriteria;
+	}
+
+	public Date getDeadline() {
+		return deadline;
+	}
+
+	public void setDeadline(Date deadline) {
+		this.deadline = deadline;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
+
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
+	}
+
+	@Override
+	public String toString() {
+		return "JobPost [jobId=" + jobId + ", authorityId=" + authorityId + ", companyName=" + companyName
+				+ ", jobTitle=" + jobTitle + ", jobDescription=" + jobDescription + ", salary=" + salary
+				+ ", eligibilityCriteria=" + eligibilityCriteria + ", deadline=" + deadline + ", createdDate="
+				+ createdDate + ", updatedDate=" + updatedDate + "]";
+	}
+	
+}

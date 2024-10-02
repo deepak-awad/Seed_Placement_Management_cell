@@ -1,0 +1,36 @@
+package com.service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.dao.CandidateProfile;
+import com.repository.CandidateProfileRepository;
+
+@Service
+public class CandidateProfileService {
+
+    @Autowired
+    private CandidateProfileRepository candidateProfileRepository;
+
+    public Iterable<CandidateProfile> getAllCandidateProfiles() {
+        return candidateProfileRepository.findAll();
+    }
+
+    public Optional<CandidateProfile> getCandidateProfileById(Long candidateProfileId) {
+        return candidateProfileRepository.findById(candidateProfileId);
+    }
+
+    public CandidateProfile createOrUpdateCandidateProfile(CandidateProfile candidateProfile) {
+        if (candidateProfile.getCandidateProfileId() == null) {
+            candidateProfile.setCreatedDate(new java.util.Date());
+        }
+        candidateProfile.setUpdatedDate(new java.util.Date());
+        return candidateProfileRepository.save(candidateProfile);
+    }
+
+    public void deleteCandidateProfile(Long candidateProfileId) {
+        candidateProfileRepository.deleteById(candidateProfileId);
+    }
+}

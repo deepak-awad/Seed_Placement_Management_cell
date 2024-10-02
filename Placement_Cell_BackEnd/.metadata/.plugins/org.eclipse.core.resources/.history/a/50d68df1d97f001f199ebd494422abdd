@@ -1,0 +1,36 @@
+package com.service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.dao.Queries;
+import com.repository.QueriesRepository;
+
+@Service
+public class QueriesService {
+
+    @Autowired
+    private QueriesRepository queriesRepository;
+
+    // Get all queries
+    public Iterable<Queries> getAllQueries() {
+        return queriesRepository.findAll();
+    }
+
+    // Get query by ID
+    public Optional<Queries> getQueryById(Long id) {
+        return queriesRepository.findById(id);
+    }
+
+    // Save or update query
+    public Queries saveOrUpdateQuery(Queries query) {
+        return queriesRepository.save(query);
+    }
+
+    // Delete query
+    public void deleteQuery(Long id) {
+        queriesRepository.deleteById(id);
+    }
+}

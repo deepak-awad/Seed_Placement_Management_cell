@@ -1,0 +1,64 @@
+package com.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.dao.PlacementExecutive;
+import com.service.PlacementExecutiveService;
+
+@RestController
+@CrossOrigin("*")
+@RequestMapping("/placement-executives")
+public class PlacementExecutiveController {
+
+    @Autowired
+    private PlacementExecutiveService placementExecutiveService;
+    
+ // Get placement executive by username
+    @GetMapping("/username/{username}")
+    public ResponseEntity<PlacementExecutive> getExecutiveByUsername(@RequestParam String username) {
+        Optional<PlacementExecutive> executive = placementExecutiveService.getExecutiveByUsername(username);
+        return executive.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    // Get all placement executives
+    @GetMapping("/all")
+    public ResponseEntity<List<PlacementExecutive>> getAllExecutives() {
+        return new ResponseEntity<>(placementExecutiveService.getAllExecutives(), HttpStatus.OK);
+    }
+
+    // Get placement executive by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<PlacementExecutive> getExecutiveById(@PathVariable Long id) {
+        Optional<PlacementExecutive> executive = placementExecutiveService.getExecutiveById(id);
+        return executive.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    // Create or update a placement executive
+    @PostMapping("/save")
+    public ResponseEntity<PlacementExecutive> createOrUpdateExecutive(@RequestBody PlacementExecutive executive) {
+        return new ResponseEntity<>(placementExecutiveService.createOrUpdateExecutive(executive), HttpStatus.CREATED);
+    }
+
+    // Delete a placement executive
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteExecutive(@PathVariable Long id) {
+        placementExecutiveService.deleteExecutive(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+}

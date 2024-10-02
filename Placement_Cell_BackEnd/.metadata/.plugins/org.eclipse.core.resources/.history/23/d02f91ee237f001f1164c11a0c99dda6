@@ -1,0 +1,17 @@
+package com.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+
+import com.dao.Application;
+
+public interface ApplicationRepository extends CrudRepository<Application, Long> {
+    
+	 @Query("SELECT new com.dto.JobApplicationDTO(j.companyName, j.jobTitle, a.status) " +
+	           "FROM JobPost j INNER JOIN Application a ON j.jobId = a.jobId " +
+	           "WHERE a.candidateId = :candidateId")
+	    List<JobApplicationDTO> findApplicationsByCandidateId(@Param("candidateId") Long candidateId);
+}

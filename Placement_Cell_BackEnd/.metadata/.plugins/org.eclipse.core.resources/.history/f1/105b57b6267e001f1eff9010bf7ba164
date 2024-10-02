@@ -1,0 +1,48 @@
+package com.controller;
+
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.dao.CandidateRegistration;
+import com.service.CandidateRegistrationService;
+
+@RestController
+@RequestMapping("/candidate")
+public class CandidateRegistrationController {
+
+    @Autowired
+    private CandidateRegistrationService service;
+    
+    // Register a new candidate
+    @PostMapping("/register")
+    public ResponseEntity<CandidateRegistration> registerCandidate(@RequestBody CandidateRegistration candidate) {
+        return new ResponseEntity<>(service.registerCandidate(candidate), HttpStatus.CREATED);
+    }
+
+    // Get all candidates
+    @GetMapping("/all")
+    public ResponseEntity<Iterable<CandidateRegistration>> getAllCandidates() {
+        return new ResponseEntity<>(service.getAllCandidates(), HttpStatus.OK);
+    }
+
+    // Get candidate by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<CandidateRegistration> getCandidateById(@PathVariable Long id) {
+        Optional<CandidateRegistration> candidate = service.getCandidateById(id);
+        if (candidate.isPresent()) {
+            return new ResponseEntity<>(candidate.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // Delete a candidate
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteCandidate(@PathVariable Long id) {
+        service.deleteCandidate(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+}

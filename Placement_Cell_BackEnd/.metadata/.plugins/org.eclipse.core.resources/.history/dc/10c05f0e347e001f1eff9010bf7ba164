@@ -1,0 +1,91 @@
+package com.controller;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.dao.CandidateRegistration;
+import com.service.CandidateRegistrationService;
+
+import jakarta.servlet.http.HttpSession;
+
+@RestController
+@RequestMapping("/candidate")
+public class CandidateRegistrationController {
+
+    @Autowired
+    private CandidateRegistrationService service;
+
+    // Get all candidates
+    @GetMapping("/all")
+    public ResponseEntity<Iterable<CandidateRegistration>> getAllCandidates() {
+        return new ResponseEntity<>(service.getAllCandidates(), HttpStatus.OK);
+    }
+
+    // Get candidate by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<CandidateRegistration> getCandidateById(@PathVariable Long id) {
+        Optional<CandidateRegistration> candidate = service.getCandidateById(id);
+        return candidate.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    // Register a new candidate
+    @PostMapping("/register")
+    public ResponseEntity<String> registerCandidate(@RequestBody CandidateRegistration candidate) {
+        // Check if email already exists
+        Optional<CandidateRegistration> existingCandidate = service.getCandidateByEmail(candidate.getEmail());
+        if (existingCandidate.isPresent()) {
+            // If email already exists, return 400 BAD REQUEST
+            return new ResponseEntity<>("Email already registered. Please use a different email.", HttpStatus.BAD_REQUEST);
+        }
+
+        // Save the new candidate
+        service.registerCandidate(candidate);
+        return new ResponseEntity<>("Candidate registered successfully!", HttpStatus.CREATED);
+    }
+
+    // Candidate login
+    @PostMapping("/login/{email}/{password}")
+    public ResponseEntity<CandidateRegistration> candidateLogin(@PathVariable String email, @PathVariable String password,HttpSession session) {
+        // Fetch the candidate using the service method
+        Optional<CandidateRegistration> candidate = service.checkCandidateByEmailAndPassword(email, password);
+
+        if (candidate.isPresent()) {
+        	session.setAttribute("candidate", candidate.get());
+            return new ResponseEntity<>(candidate.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // Return 401 for incorrect credentials
+        }
+    }
+
+    // Forget password (fetch candidate by email)
+    @GetMapping("/forget-password/{email}")
+    public ResponseEntity<CandidateRegistration> getCandidateByEmail(@PathVariable String email) {
+        Optional<CandidateRegistration> candidate = service.getCandidateByEmail(email);
+        if (candidate.isPresent()) {
+            return new ResponseEntity<>(candidate.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    // Candidate logout
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession session) {
+        session.invalidate(); // Invalidate session to log the candidate out
+        return new ResponseEntity<>("Logout successful", HttpStatus.OK);
+    }
+
+
+    // Delete a candidate
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteCandidate(@PathVariable Long id) {
+        service.deleteCandidate(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+}

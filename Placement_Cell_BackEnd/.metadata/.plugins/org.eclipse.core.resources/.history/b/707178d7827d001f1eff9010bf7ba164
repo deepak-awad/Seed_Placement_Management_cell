@@ -1,0 +1,27 @@
+package com.service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.dao.PlacementExecutive;
+import com.repository.PlacementExecutiveRepository;
+
+@Service
+public class PlacementExecutiveService {
+
+    @Autowired
+    private PlacementExecutiveRepository placementExecutiveRepository;
+
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    
+    public Optional<PlacementExecutive> getExecutiveByUsername(String username) {
+        return placementExecutiveRepository.findByUsername(username);
+    }
+
+    public boolean checkPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+}

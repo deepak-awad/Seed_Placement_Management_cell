@@ -1,0 +1,212 @@
+package com.dao;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "APPLICATION")
+public class Application {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "application_seq")
+    @SequenceGenerator(name = "application_seq", sequenceName = "application_seq", allocationSize = 1)
+    private Long applicationId;
+
+    @Column(name = "candidate_id", nullable = false)
+    private Long candidateId;
+
+    @Column(name = "job_id", nullable = false)
+    private Long jobId;
+
+    @Column(name = "status", nullable = false)
+    private String status;
+    
+    @Column(name = "predefinedstatus")
+    private String predefindstatus;
+
+    @Column(name = "name")
+    private String name;
+
+    public String getPredefindstatus() {
+		return predefindstatus;
+	}
+
+	public void setPredefindstatus(String predefindstatus) {
+		this.predefindstatus = predefindstatus;
+	}
+
+	@Column(name = "email")
+    private String email;
+
+    @Column(name = "mobile")
+    private String mobile;
+
+    @Column(name = "graduation")
+    private String graduation;
+
+    @Column(name = "specialization")
+    private String specialization;
+
+    @Column(name = "passing_year")
+    private Integer passingYear;
+
+    @Column(name = "technical_skills")
+    private String technicalSkills;
+
+    public Application(Long applicationId, Long candidateId, Long jobId, String status, String predefindstatus,
+			String name, String email, String mobile, String graduation, String specialization, Integer passingYear,
+			String technicalSkills, String resumeLink, LocalDateTime createdDate, LocalDateTime updateDate) {
+		super();
+		this.applicationId = applicationId;
+		this.candidateId = candidateId;
+		this.jobId = jobId;
+		this.status = status;
+		this.predefindstatus = predefindstatus;
+		this.name = name;
+		this.email = email;
+		this.mobile = mobile;
+		this.graduation = graduation;
+		this.specialization = specialization;
+		this.passingYear = passingYear;
+		this.technicalSkills = technicalSkills;
+		this.resumeLink = resumeLink;
+		this.createdDate = createdDate;
+		this.updateDate = updateDate;
+	}
+
+	@Column(name = "resume_link")
+    private String resumeLink;
+
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
+    @Column(name = "update_date")
+    private LocalDateTime updateDate;
+
+    // Constructors, Getters and Setters
+    public Application() {
+        super();
+    }
+
+    // Getters and Setters for all fields
+    public Long getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(Long applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public Long getCandidateId() {
+        return candidateId;
+    }
+
+    public void setCandidateId(Long candidateId) {
+        this.candidateId = candidateId;
+    }
+
+    public Long getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(Long jobId) {
+        this.jobId = jobId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getGraduation() {
+        return graduation;
+    }
+
+    public void setGraduation(String graduation) {
+        this.graduation = graduation;
+    }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
+    }
+
+    public Integer getPassingYear() {
+        return passingYear;
+    }
+
+    public void setPassingYear(Integer passingYear) {
+        this.passingYear = passingYear;
+    }
+
+    public String getTechnicalSkills() {
+        return technicalSkills;
+    }
+
+    public void setTechnicalSkills(String technicalSkills) {
+        this.technicalSkills = technicalSkills;
+    }
+
+    public String getResumeLink() {
+        return resumeLink;
+    }
+
+    public void setResumeLink(String resumeLink) {
+        this.resumeLink = resumeLink;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public LocalDateTime getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(LocalDateTime updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    @Override
+	public String toString() {
+		return "Application [applicationId=" + applicationId + ", candidateId=" + candidateId + ", jobId=" + jobId
+				+ ", status=" + status + ", predefindstatus=" + predefindstatus + ", name=" + name + ", email=" + email
+				+ ", mobile=" + mobile + ", graduation=" + graduation + ", specialization=" + specialization
+				+ ", passingYear=" + passingYear + ", technicalSkills=" + technicalSkills + ", resumeLink=" + resumeLink
+				+ ", createdDate=" + createdDate + ", updateDate=" + updateDate + "]";
+	}
+}
