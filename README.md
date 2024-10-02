@@ -1,0 +1,1 @@
+The placement management system to be built for colleges and the education system will use React.js for the front end and Spring Boot for the backend REST API. Candidates will be able to apply for jobs and check the status of their applications. Additionally, the executive section will manage candidates, job postings, and their shortlisting categories.
